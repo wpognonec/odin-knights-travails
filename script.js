@@ -12,7 +12,6 @@ const moves = [
 ]
 
 function knightMoves(startNode, endNode) {
-  const adjacencyList = generateAdjacencyList()
   const queue = [[startNode, [startNode]]]
   const visited = new Set()
 
@@ -22,13 +21,24 @@ function knightMoves(startNode, endNode) {
     if (visited.has(currNode)) continue
     visited.add(currNode)
 
-    const neighbors = adjacencyList[currNode]
+    const neighbors = getValidMoves(currNode)
     neighbors.forEach((neighbor) => {
       const newPath = [...currPath, neighbor]
       queue.push([neighbor, newPath])
     })
   }
   return null
+}
+
+function getValidMoves([row, col]) {
+  const validMoves = []
+  moves.forEach(([rOffset, cOffset]) => {
+    const newRow = row + rOffset
+    const newCol = col + cOffset
+    const newIndex = getIndex(newRow, newCol)
+    if (newIndex) validMoves.push(newIndex)
+  })
+  return validMoves
 }
 
 function generateAdjacencyList() {
