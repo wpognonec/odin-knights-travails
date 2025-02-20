@@ -11,7 +11,25 @@ const moves = [
   [2, 1],
 ]
 
-function knightMoves(p1, p2) {}
+function knightMoves(startNode, endNode) {
+  const adjacencyList = generateAdjacencyList()
+  const queue = [[startNode, [startNode]]]
+  const visited = new Set()
+
+  while (queue.length > 0) {
+    const [currNode, currPath] = queue.shift()
+    if (eq(currNode, endNode)) return currPath
+    if (visited.has(currNode)) continue
+    visited.add(currNode)
+
+    const neighbors = adjacencyList[currNode]
+    neighbors.forEach((neighbor) => {
+      const newPath = [...currPath, neighbor]
+      queue.push([neighbor, newPath])
+    })
+  }
+  return null
+}
 
 function generateAdjacencyList() {
   const adjacencyList = {}
@@ -32,7 +50,20 @@ function generateAdjacencyList() {
 
 function getIndex(row, col) {
   if (!positions.includes(row) || !positions.includes(col)) return null
-  return row * size + col
+  return [row, col]
+  // return row * size + col
 }
 
-console.log(generateAdjacencyList())
+function eq(arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false
+  }
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false
+    }
+  }
+  return true
+}
+
+console.log(knightMoves([0, 0], [7, 7]))
